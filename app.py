@@ -166,6 +166,9 @@ app.layout = html.Div([
         4. Given what the "raw data" look like, what do you think "seasonally adjusted data" means?
         5. Use the graph's "Camera" icon to make a PNG file of your graph with all data and linear model fitting determined from the *first* 5 years.
         6. Do the same for the case with linear model fitting from the *last* 5 years. Submit both PNG files for assessment.
+        7. FINALLY - We are just beginning to learn how to use Dashboards in courses. 
+        Therefore we would be grateful if each student could individually complete the online anonymous feedback form at [https://ubc.ca1.qualtrics.com/jfe/form/SV_0ju4v38gf1Ok0ke](https://ubc.ca1.qualtrics.com/jfe/form/SV_0ju4v38gf1Ok0ke).
+        It can also be done on your Phone, and should take only 1-2 minutes. Many thanks! 
 
         ----
         #### Attribution
