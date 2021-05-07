@@ -78,24 +78,45 @@ app.layout = html.Div([
         ----
         
         '''),
-    # controls for plot
+    # controls for plot for 1st 5 years
     html.Div([
-        dcc.Markdown(''' **_Slope:_** '''),
+        dcc.Markdown(''' **_Slope (for 1st 5 years):_** '''),
         dcc.Slider(
-            id='line_slope', min=0, max=3, step=0.05, value=2,
+            id='line_slope_1st', min=0, max=3, step=0.05, value=2,
             marks={0:'0', 0.5:'0.5', 1:'1', 1.5:'1.5', 2:'2', 2.5:'2.5', 3:'3'},
             tooltip={'always_visible':True, 'placement':'topLeft'}
         ),
     ], style={'width': '48%', 'display': 'inline-block'}),
     
     html.Div([
-        dcc.Markdown(''' **_Intercept:_** '''),
+        dcc.Markdown(''' **_Intercept (for 1st 5 years):_** '''),
         dcc.Slider(
-            id='line_intcpt', min=250, max=320, step=0.25,value=312,
+            id='line_intcpt_1st', min=250, max=320, step=0.25,value=312,
             marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
             tooltip={'always_visible':True, 'placement':'topLeft'}
         ),
     ], style={'width': '48%', 'display': 'inline-block'}),
+
+    # controls for plot for last 5 years
+    html.Div([
+        dcc.Markdown(''' **_Slope (for last 5 years):_** '''),
+        dcc.Slider(
+            id='line_slope_last', min=0, max=3, step=0.05, value=1.65,
+            marks={0:'0', 0.5:'0.5', 1:'1', 1.5:'1.5', 2:'2', 2.5:'2.5', 3:'3'},
+            tooltip={'always_visible':True, 'placement':'topLeft'}
+        ),
+    ], style={'width': '48%', 'display': 'inline-block'}),
+    
+    html.Div([
+        dcc.Markdown(''' **_Intercept (for last 5 years):_** '''),
+        dcc.Slider(
+            id='line_intcpt_last', min=250, max=320, step=0.25,value=312,
+            marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
+            tooltip={'always_visible':True, 'placement':'topLeft'}
+        ),
+    ], style={'width': '48%', 'display': 'inline-block'}),
+
+    
     
 # start and end year of plot 
 # NOT NEEDED IF USING 1ST AND LAST 5 YEAR RADIO BUTTONS.   
@@ -187,19 +208,22 @@ app.layout = html.Div([
 # The callback function with it's app.callback wrapper.
 @app.callback(
     Output('graph', 'figure'),
-    Input('line_slope', 'value'),
-    Input('line_intcpt', 'value'),
+    Input('line_slope_1st', 'value'),
+    Input('line_intcpt_1st', 'value'),
+    Input('line_slope_last', 'value'),
+    Input('line_intcpt_last', 'value'),
     Input('Data_type', 'value'),
 #    Input('start', 'value'),
 #    Input('end', 'value'),
     Input('zone', 'value'),
     )
 #def update_graph(line_slope, line_intcpt, Data_type, start, end, zone):
-def update_graph(line_slope, line_intcpt, Data_type, zone):
+def update_graph(line_slope_1st, line_intcpt_1st, line_slope_last, line_intcpt_last, Data_type, zone):
 # construct all the figure's components
     plot = go.Figure()
 
-    l1 = line_slope * (co2_data.date - np.min(co2_data.date)) + line_intcpt
+    l1 = line_slope_1st * (co2_data.date - np.min(co2_data.date)) + line_intcpt_1st
+    l2 = line_slope_last * (co2_data.date - np.min(co2_data.date)) + line_intcpt_last
 
     if Data_type == 'raw':
         plot.add_trace(go.Scatter(x=co2_data.date, y=co2_data.raw_co2, mode='markers',
@@ -209,7 +233,10 @@ def update_graph(line_slope, line_intcpt, Data_type, zone):
             line=dict(color='MediumTurquoise'), name="CO2"))
     
     plot.add_trace(go.Scatter(x=co2_data.date, y=l1, mode='lines',
-        line=dict(color='SandyBrown'), name="linear fit"))
+        line=dict(color='SandyBrown'), name="linear fit (for 1st 5 years)"))
+
+    plot.add_trace(go.Scatter(x=co2_data.date, y=l2, mode='lines',
+        line=dict(color='MediumVioletRed'), name="linear fit (for last 5 years)"))
     
     plot.update_layout(xaxis_title='Year', yaxis_title='ppm')
 #    plot.update_xaxes(range=[start, end])
@@ -226,8 +253,10 @@ def update_graph(line_slope, line_intcpt, Data_type, zone):
         plot.update_xaxes(range=[1955, 2023])
         plot.update_yaxes(range=[310, 440])
 
-    predicted_co2 = predict_co2(line_slope, line_intcpt, 1958, 2030)
-    plot.layout.title = f"Predicted CO2 for {2030}: {predicted_co2:1.2f} ppm."
+    predicted_co2_first = predict_co2(line_slope_1st, line_intcpt_1st, 1958, 2030)
+    predicted_co2_last = predict_co2(line_slope_last, line_intcpt_last, 1958, 2030)
+    plot.layout.title = f"""Predicted CO2 for {2030} (based on linear fit for <b>first</b> 5 years): {predicted_co2_first:1.2f} ppm.<br>
+Predicted CO2 for {2030} (based on linear fit for <b>last</b> 5 years): {predicted_co2_last:1.2f} ppm."""
 
     return plot
 
