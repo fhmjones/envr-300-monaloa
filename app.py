@@ -91,8 +91,8 @@ app.layout = html.Div([
     html.Div([
         dcc.Markdown(''' **_Intercept (for 1st 5 years):_** '''),
         dcc.Slider(
-            id='line_intcpt_1st', min=250, max=320, step=0.25,value=312,
-            marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
+            id='line_intcpt_1st', min=312, max=322, step=0.25,value=312,
+            marks={312:'312', 314:'314', 316:'316', 318:'318', 320:'320', 322:'322'},
             tooltip={'always_visible':True, 'placement':'topLeft'}
         ),
     ], style={'width': '48%', 'display': 'inline-block'}),
@@ -101,8 +101,8 @@ app.layout = html.Div([
     html.Div([
         dcc.Markdown(''' **_Slope (for last 5 years):_** '''),
         dcc.Slider(
-            id='line_slope_last', min=0, max=3, step=0.05, value=1.65,
-            marks={0:'0', 0.5:'0.5', 1:'1', 1.5:'1.5', 2:'2', 2.5:'2.5', 3:'3'},
+            id='line_slope_last', min=2.0, max=4.5, step=0.05, value=3.4,
+            marks={2.0:'2.0', 2.5:'2.5', 3.0:'3.0', 3.5:'3.5', 4.0:'4.0', 4.5:'4.5'},
             tooltip={'always_visible':True, 'placement':'topLeft'}
         ),
     ], style={'width': '48%', 'display': 'inline-block'}),
@@ -110,8 +110,8 @@ app.layout = html.Div([
     html.Div([
         dcc.Markdown(''' **_Intercept (for last 5 years):_** '''),
         dcc.Slider(
-            id='line_intcpt_last', min=250, max=320, step=0.25,value=312,
-            marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
+            id='line_intcpt_last', min=200, max=250, step=0.25, value=200,
+            marks={200:'200', 210:'210', 220:'220', 230:'230', 240:'240', 250:'250'},
             tooltip={'always_visible':True, 'placement':'topLeft'}
         ),
     ], style={'width': '48%', 'display': 'inline-block'}),
