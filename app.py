@@ -80,41 +80,47 @@ app.layout = html.Div([
         '''),
     # controls for plot for 1st 5 years
     html.Div([
-        dcc.Markdown(''' **_Slope (for 1st 5 years):_** '''),
-        dcc.Slider(
-            id='line_slope_1st', min=0, max=3, step=0.05, value=2,
-            marks={0:'0', 0.5:'0.5', 1:'1', 1.5:'1.5', 2:'2', 2.5:'2.5', 3:'3'},
-            tooltip={'always_visible':True, 'placement':'topLeft'}
-        ),
-    ], style={'width': '48%', 'display': 'inline-block'}),
-    
-    html.Div([
-        dcc.Markdown(''' **_Intercept (for 1st 5 years):_** '''),
-        dcc.Slider(
-            id='line_intcpt_1st', min=250, max=320, step=0.25,value=312,
-            marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
-            tooltip={'always_visible':True, 'placement':'topLeft'}
-        ),
-    ], style={'width': '48%', 'display': 'inline-block'}),
+        html.Div([
+            dcc.Markdown(''' **_Slope (for 1st 5 years):_** '''),
+            dcc.Slider(
+                id='line_slope_1st', min=0, max=3, step=0.05, value=2,
+                marks={0:'0', 0.5:'0.5', 1:'1', 1.5:'1.5', 2:'2', 2.5:'2.5', 3:'3'},
+                tooltip={'always_visible':True, 'placement':'topLeft'}
+            ),
+        ], style={'width': '48%', 'display': 'inline-block'}),
+        
+        html.Div([
+            dcc.Markdown(''' **_Intercept (for 1st 5 years):_** '''),
+            dcc.Slider(
+                id='line_intcpt_1st', min=250, max=320, step=0.25,value=312,
+                marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
+                tooltip={'always_visible':True, 'placement':'topLeft'}
+            ),
+        ], style={'width': '48%', 'display': 'inline-block'}),
+    ], id='1st5yrs_slider', style={'display': 'block'}), 
+
 
     # controls for plot for last 5 years
     html.Div([
-        dcc.Markdown(''' **_Slope (for last 5 years):_** '''),
-        dcc.Slider(
-            id='line_slope_last', min=0, max=3, step=0.05, value=1.65,
-            marks={0:'0', 0.5:'0.5', 1:'1', 1.5:'1.5', 2:'2', 2.5:'2.5', 3:'3'},
-            tooltip={'always_visible':True, 'placement':'topLeft'}
-        ),
-    ], style={'width': '48%', 'display': 'inline-block'}),
+        html.Div([
+            dcc.Markdown(''' **_Slope (for last 5 years):_** '''),
+            dcc.Slider(
+                id='line_slope_last', min=0, max=3, step=0.05, value=1.65,
+                marks={0:'0', 0.5:'0.5', 1:'1', 1.5:'1.5', 2:'2', 2.5:'2.5', 3:'3'},
+                tooltip={'always_visible':True, 'placement':'topLeft'}
+            ),
+        ], style={'width': '48%', 'display': 'inline-block'}),
+        
+        html.Div([
+            dcc.Markdown(''' **_Intercept (for last 5 years):_** '''),
+            dcc.Slider(
+                id='line_intcpt_last', min=250, max=320, step=0.25,value=312,
+                marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
+                tooltip={'always_visible':True, 'placement':'topLeft'}
+            ),
+        ], style={'width': '48%', 'display': 'inline-block'}),
+    ], id='last5yrs_slider', style={'display': 'none'}),
     
-    html.Div([
-        dcc.Markdown(''' **_Intercept (for last 5 years):_** '''),
-        dcc.Slider(
-            id='line_intcpt_last', min=250, max=320, step=0.25,value=312,
-            marks={250:'250', 260:'260', 270:'270', 280:'280', 290:'290', 300:'300', 310:'310', 320:'320'},
-            tooltip={'always_visible':True, 'placement':'topLeft'}
-        ),
-    ], style={'width': '48%', 'display': 'inline-block'}),
 
     
     
@@ -206,6 +212,26 @@ app.layout = html.Div([
 # end of layout and definition of controls.
 ##################################
 # The callback function with it's app.callback wrapper.
+@app.callback(
+    Output(component_id='1st5yrs_slider', component_property='style'),
+    Input(component_id='zone', component_property='value'),
+)
+def show_hide_1st_slider(zone):
+    if zone == '1st5yrs' or zone == 'alldata':
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
+
+@app.callback(
+    Output(component_id='last5yrs_slider', component_property='style'),
+    Input(component_id='zone', component_property='value'),
+)
+def show_hide_last_slider(zone):
+    if zone == 'last5yrs' or zone == 'alldata':
+        return {'display': 'block'}
+    else:
+        return {'display': 'none'}
+
 @app.callback(
     Output('graph', 'figure'),
     Input('line_slope_1st', 'value'),
